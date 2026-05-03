@@ -10,41 +10,27 @@
  */
 class Solution {
     public ListNode partition(ListNode head, int x) {
-         ArrayList<Integer> nums = new ArrayList<>();
-        ListNode temp = head;
+           ListNode beforeHead = new ListNode(0);
+        ListNode afterHead = new ListNode(0);
 
-        while (temp != null) {
-            nums.add(temp.val);
-            temp = temp.next;
-        }
+        ListNode before = beforeHead;
+        ListNode after = afterHead;
 
-        // 👉 NEW: result list (instead of in-place swapping)
-        ArrayList<Integer> result = new ArrayList<>();
-
-        // first add < x
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums.get(i) < x) {
-                result.add(nums.get(i));
+        while (head != null) {
+            if (head.val < x) {
+                before.next = head;
+                before = before.next;
+            } else {
+                after.next = head;
+                after = after.next;
             }
+            head = head.next;
         }
 
-        // then add >= x
-        for (int i = 0; i < nums.size(); i++) {
-            if (nums.get(i) >= x) {
-                result.add(nums.get(i));
-            }
-        }
+        after.next = null;              
+        before.next = afterHead.next;   
 
-        // rebuild linked list
-        ListNode dummy = new ListNode(0);
-        ListNode ans = dummy;
-
-        for (int i = 0; i < result.size(); i++) {
-            dummy.next = new ListNode(result.get(i));
-            dummy = dummy.next;
-        }
-
-        return ans.next;
+        return beforeHead.next;
 
     }
 }
